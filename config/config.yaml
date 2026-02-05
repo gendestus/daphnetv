@@ -4,22 +4,22 @@ channels:
     port: 8001
     schedule:
       - time: "00:00-07:00"
-        category: "movies"
+        category: "daphnetv"
         ad_frequency: 1800
       - time: "07:00-09:00"
-        category: "cartoons"
+        category: "daphnemovies"
         ad_frequency: 900
       - time: "09:00-12:00"
-        category: "educational"
+        category: "daphnetv"
         ad_frequency: 1200
       - time: "12:00-14:00"
-        category: "movies"
+        category: "daphnemovies"
         ad_frequency: 1800
       - time: "14:00-18:00"
-        category: "cartoons"
+        category: "daphnetv"
         ad_frequency: 900
       - time: "18:00-24:00"
-        category: "movies"
+        category: "daphnetv"
         ad_frequency: 1800
 
     ad_rotation:

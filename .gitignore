@@ -8,6 +8,8 @@ config/playlists/*
 config/schedules/*
 !config/schedules/.gitkeep
 config/state.json
+# Only root-level stream output dir (NOT app/stream/ package)
+/stream/
 *.log
 .venv/
 venv/
