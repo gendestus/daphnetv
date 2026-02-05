@@ -83,16 +83,26 @@ class JellyfinClient:
         return unique
 
     def get_items_by_tags(self, tags: list[str]) -> list[dict]:
-        """Fetch items that have any of the given tags."""
-        items = self.get_items()
-        result: list[dict] = []
-        for item in items:
-            item_tags = item.get("Tags") or []
-            for tag in tags:
-                if tag.lower() in [t.lower() for t in item_tags]:
-                    result.append(item)
-                    break
-        return result
+        """Fetch items that have any of the given tags (uses API Tags filter)."""
+        all_items: list[dict] = []
+        for tag in tags:
+            params = {
+                "UserId": self._get_user_id(),
+                "Recursive": "true",
+                "IncludeItemTypes": "Movie,Episode",
+                "Tags": tag,
+            }
+            data = self._get("/Items", params)
+            all_items.extend(data.get("Items", []))
+
+        # Deduplicate by Id
+        seen: set[str] = set()
+        unique: list[dict] = []
+        for item in all_items:
+            if item["Id"] not in seen:
+                seen.add(item["Id"])
+                unique.append(item)
+        return unique
 
     def get_items_by_category(self, category: str) -> list[dict]:
         """
