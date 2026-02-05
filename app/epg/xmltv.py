@@ -1,5 +1,5 @@
 """XMLTV EPG generation for program guide."""
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 
@@ -9,7 +9,11 @@ def _format_xmltv_time(dt: datetime) -> str:
 
 
 def _parse_time_to_datetime(date_str: str, time_str: str) -> datetime:
-    """Parse date (YYYY-MM-DD) and time (HH:MM:SS) to datetime."""
+    """Parse date (YYYY-MM-DD) and time (HH:MM:SS) to datetime.
+    Handles 24:00:00 as midnight of the next day."""
+    if time_str in ("24:00:00", "24:00"):
+        dt = datetime.strptime(f"{date_str} 00:00:00", "%Y-%m-%d %H:%M:%S")
+        return dt + timedelta(days=1)
     return datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M:%S")
 
 
