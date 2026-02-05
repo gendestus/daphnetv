@@ -1,0 +1,34 @@
+services:
+  daphnetv:
+    build: .
+    container_name: daphnetv
+    restart: unless-stopped
+
+    volumes:
+      # Jellyfin media library (read-only) - update path for your setup
+      - /path/to/jellyfin/media:/media:ro
+
+      # Your ads directory - update path for your setup
+      - /path/to/ads:/ads:ro
+
+      # Persistent config and state
+      - ./config:/config
+
+      # Stream output
+      - ./stream:/stream
+
+    environment:
+      - JELLYFIN_URL=http://jellyfin:8096
+      - JELLYFIN_API_KEY=your-api-key-here
+      - CHANNEL_ID=kids-channel-1
+      - TZ=America/New_York
+
+    ports:
+      - "8001:8001"
+
+    networks:
+      - jellyfin-network
+
+networks:
+  jellyfin-network:
+    driver: bridge

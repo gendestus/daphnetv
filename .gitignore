@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.env.local
+config/playlists/*
+!config/playlists/.gitkeep
+config/schedules/*
+!config/schedules/.gitkeep
+config/state.json
+stream/
+*.log
+.venv/
+venv/

@@ -1,0 +1,35 @@
+channels:
+  - id: kids-channel-1
+    name: "Saturday Morning Cartoons"
+    port: 8001
+    schedule:
+      - time: "00:00-07:00"
+        category: "movies"
+        ad_frequency: 1800
+      - time: "07:00-09:00"
+        category: "cartoons"
+        ad_frequency: 900
+      - time: "09:00-12:00"
+        category: "educational"
+        ad_frequency: 1200
+      - time: "12:00-14:00"
+        category: "movies"
+        ad_frequency: 1800
+      - time: "14:00-18:00"
+        category: "cartoons"
+        ad_frequency: 900
+      - time: "18:00-24:00"
+        category: "movies"
+        ad_frequency: 1800
+
+    ad_rotation:
+      strategy: "round-robin"
+      ads_per_break: 2
+
+jellyfin:
+  url: "http://jellyfin:8096"
+  api_key: "your-api-key"
+
+ads:
+  directory: "/ads"
+  formats: [".mp4", ".mkv"]
