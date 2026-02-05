@@ -18,17 +18,16 @@ services:
       - ./stream:/stream
 
     environment:
-      - JELLYFIN_URL=http://jellyfin:8096
+      # host.docker.internal for Jellyfin on host (extra_hosts required on Linux)
+      - JELLYFIN_URL=http://host.docker.internal:8096
       - JELLYFIN_API_KEY=your-api-key-here
       - CHANNEL_ID=kids-channel-1
       - TZ=America/New_York
 
+    # Bind to all interfaces so desktop PC can preview channels
     ports:
-      - "8001:8001"
+      - "0.0.0.0:8001:8001"
 
-    networks:
-      - jellyfin-network
-
-networks:
-  jellyfin-network:
-    driver: bridge
+    # Required on Linux for container to reach host (Jellyfin)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
