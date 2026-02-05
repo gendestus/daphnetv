@@ -91,6 +91,7 @@ class JellyfinClient:
                 "Recursive": "true",
                 "IncludeItemTypes": "Movie,Episode",
                 "Tags": tag,
+                "Fields": "Path,MediaSources,RunTimeTicks,CumulativeRunTimeTicks",
             }
             data = self._get("/Items", params)
             all_items.extend(data.get("Items", []))
@@ -119,7 +120,8 @@ class JellyfinClient:
 
     def get_item_file_path(self, item_id: str) -> str | None:
         """Get the file path for a media item."""
-        item = self._get(f"/Items/{item_id}")
+        user_id = self._get_user_id()
+        item = self._get(f"/Users/{user_id}/Items/{item_id}")
         if "Path" in item:
             return item["Path"]
         # For episodes, Path might be on the parent
@@ -129,5 +131,6 @@ class JellyfinClient:
 
     def get_media_sources(self, item_id: str) -> list[dict]:
         """Get media sources for an item (for episodes, etc.)."""
-        item = self._get(f"/Items/{item_id}")
+        user_id = self._get_user_id()
+        item = self._get(f"/Users/{user_id}/Items/{item_id}")
         return item.get("MediaSources", [])

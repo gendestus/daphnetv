@@ -80,6 +80,11 @@ class ChannelScheduler:
                 start_time = f"{current_min // 60:02d}:{current_min % 60:02d}:00"
                 end_time = f"{end_min_this // 60:02d}:{end_min_this % 60:02d}:00"
 
+                # Use Path from item if already in API response (avoids extra call)
+                path = item.get("Path")
+                if not path and item.get("MediaSources"):
+                    path = item["MediaSources"][0].get("Path") if item["MediaSources"] else None
+
                 blocks.append({
                     "start_time": start_time,
                     "end_time": end_time,
@@ -87,23 +92,25 @@ class ChannelScheduler:
                     "title": item.get("Name", "Unknown"),
                     "jellyfin_id": item["Id"],
                     "category": category,
-                    "file_path": None,  # Filled below
+                    "file_path": path,
                     "run_minutes": actual_run,
                 })
 
                 current_min = end_min_this
 
-        # Resolve file paths
+        # Resolve file paths for blocks missing them (items may not include Path in list response)
         for block in blocks:
-            if block["type"] == "show" and block.get("jellyfin_id"):
-                path = self.jellyfin.get_item_file_path(block["jellyfin_id"])
-                if path:
-                    block["file_path"] = path
-                else:
-                    # Try media sources for episodes
-                    sources = self.jellyfin.get_media_sources(block["jellyfin_id"])
-                    if sources and sources[0].get("Path"):
-                        block["file_path"] = sources[0]["Path"]
+            if block["type"] == "show" and block.get("jellyfin_id") and not block.get("file_path"):
+                try:
+                    path = self.jellyfin.get_item_file_path(block["jellyfin_id"])
+                    if path:
+                        block["file_path"] = path
+                    else:
+                        sources = self.jellyfin.get_media_sources(block["jellyfin_id"])
+                        if sources and sources[0].get("Path"):
+                            block["file_path"] = sources[0]["Path"]
+                except Exception as e:
+                    logger.warning("Could not get file path for %s: %s", block["jellyfin_id"], e)
 
         # Insert ads
         from app.scheduler.ad_insertion import insert_ads_simple
