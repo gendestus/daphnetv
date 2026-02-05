@@ -199,9 +199,9 @@ def main():
     port = channels_to_run[0].get("port", 8001)
     _http_server = run_http_server(
         port=port,
-        channels_callback=lambda: _channels_m3u(),
-        epg_callback=lambda: _epg_xml(),
-        health_callback=lambda: _health_check(),
+        channels_callback=lambda *a, **kw: _channels_m3u(),
+        epg_callback=lambda *a, **kw: _epg_xml(),
+        health_callback=lambda *a, **kw: _health_check(),
     )
 
     signal.signal(signal.SIGTERM, _shutdown)
