@@ -10,8 +10,8 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY app/ /app/
+# Copy application code into app package
+COPY app/ /app/app/
 
 # Create directories
 RUN mkdir -p /config /stream /ads /config/playlists /config/schedules
@@ -21,5 +21,5 @@ WORKDIR /app
 # Expose HTTP port for HLS stream
 EXPOSE 8001
 
-# Run main application
-CMD ["python", "main.py"]
+# Run as module so app package is on path
+CMD ["python", "-m", "app.main"]
