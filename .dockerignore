@@ -6,7 +6,6 @@ __pycache__
 venv
 .env
 .env.local
-stream/
 config/playlists/*
 config/schedules/*
 config/state.json
