@@ -2,6 +2,8 @@
 
 Jellyfin 24/7 TV Channel System — creates linear TV channels from your Jellyfin media library with integrated advertisements.
 
+Keep in mind this is vibecoded because I just want my kids to watch a tv channel instead. Use at your own risk.
+
 ## Overview
 
 - **Scheduler**: Fetches content from Jellyfin API, generates 24-hour schedules, inserts ads
